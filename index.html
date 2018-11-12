@@ -84,6 +84,7 @@
         }
 
         #pupilled {
+            position: absolute;
             width: 25px;
             height: 25px;
             border-radius: 12px;
@@ -119,6 +120,8 @@
         document.body.appendChild(texteBas);
         var x=0; 
 
+
+        // change couleur fond durant scroll et fait gigoter le nez
         window.onscroll = function(){
             x++;
             couleurHSLfond = "hsl(" + x + ", 100%, 50%)";
@@ -131,6 +134,8 @@
                 nez.classList.add("falling");
             }
             
+
+            // roger says :
             if(window.scrollY>1000 && window.scrollY<2000){              
                 texteBas.innerHTML = "coucou";             
             } else if(window.scrollY>2500 && window.scrollY<3500){              
@@ -140,13 +145,53 @@
             }
         };
 
-        
+        // mouvement des yeux suivant la souris
+
+        window.onmouseout = function(){
+            pupilleg.style.left = (0.25*oeilg.offsetWidth) + "px";
+            pupilleg.style.top = (0.25*oeilg.offsetHeight) + "px";
+            pupilled.style.left = (0.25*oeild.offsetWidth) + "px";
+            pupilled.style.top = (0.25*oeild.offsetHeight) + "px";
+        }
 
         document.onmousemove = function(event){
+
             var posX = event.clientX;
-            console.log(posX);
-            pupilleg.style.left = pupilleg.offsetParent.offsetLeft/2 + posX - pupilleg.offsetParent.offsetLeft + "px";
-            console.log(pupilleg.style.left);
+            var posY = event.clientY;
+
+            // oail gauche
+            if(posX < oeilg.offsetLeft){ // a gauche
+                pupilleg.style.left = 0 + "px";
+            } else if(posX > (oeilg.offsetLeft+oeilg.offsetWidth)){ //a droite
+                pupilleg.style.left = oeilg.offsetWidth/2 + "px";
+            } else if(posX < (oeilg.offsetLeft+oeilg.offsetWidth) && posX > oeilg.offsetLeft){ // dedans horizontal
+                pupilleg.style.left = ((posX - oeilg.offsetLeft)-(0.5*pupilleg.offsetWidth)) + "px";
+            }
+            if(posY < oeilg.offsetTop){ // au dessus
+                pupilleg.style.top = 0 + "px";
+            } else if(posY > (oeilg.offsetTop+oeilg.offsetHeight)){ // en dessous
+                pupilleg.style.top = oeilg.offsetHeight/2 + "px";
+            } else if(posY < (oeilg.offsetTop+oeilg.offsetHeight) && posY > oeilg.offsetTop){ // dedans vertical
+                pupilleg.style.top = ((posY - oeilg.offsetTop)-(0.5*pupilleg.offsetHeight)) + "px";
+            }
+
+            // oeil droit
+            if(posX < oeild.offsetLeft){ // a gauche
+                pupilled.style.left = 0 + "px";
+            } else if(posX > (oeild.offsetLeft+oeild.offsetWidth)){ // a droite
+                pupilled.style.left = oeild.offsetWidth/2 + "px";
+            } else if(posX < (oeild.offsetLeft+oeild.offsetWidth) && posX > oeild.offsetLeft){ // dedans horizontal
+                pupilled.style.left = posX - oeild.offsetLeft - (0.5*pupilled.offsetWidth) + "px";
+            }
+
+            if(posY < oeild.offsetTop){ // au dessus
+                pupilled.style.top = 0 + "px";
+            } else if(posY > (oeild.offsetTop+oeild.offsetHeight)){ // en dessous
+                pupilled.style.top = oeild.offsetHeight/2 + "px";
+            } else if(posY < (oeild.offsetTop+oeild.offsetHeight) && posY > oeild.offsetTop){ // dedans vertical
+                pupilled.style.top = posY - oeild.offsetTop - (0.5*pupilled.offsetHeight) + "px";
+                console.log("dedans vert");
+            }
         }
 
     </script>
